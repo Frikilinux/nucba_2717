@@ -191,14 +191,22 @@ h1 {
 }
 
 .page-number {
+  text-align: center;
+  outline: none;
   background-color: var(--page);
   border: none;
   padding: 5px 10px;
-
+  width: 50px;
   height: 30px;
   border-radius: 5px;
   color: var(--bg-white);
   font-weight: 600;
+}
+
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
 }
 
 /* .active {
@@ -207,6 +215,7 @@ h1 {
   height: 31px;
 } */
 
+.ir,
 .left,
 .right {
   background-color: var(--primary);
@@ -218,6 +227,12 @@ h1 {
   font-weight: 600;
   cursor: pointer;
 }
+
+.ir {
+  background-color: var(--active);
+}
+
+
 
 .disabled {
   background-color: var(--disabled);
