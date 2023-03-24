@@ -10,7 +10,7 @@ body {
 }
 
 main {
-    display: flex;
+  display: flex;
 	flex-direction: column;
 	align-items: center;
 	justify-content: center;
@@ -19,12 +19,15 @@ main {
 }
 
 .cardWrapper {
-    display: flex;
+  display: flex;
+	flex-wrap: wrap;
 	align-items: center;
-	justify-content: space-between;
+	justify-content: space-evenly;
 	gap: 1rem;
-	height: 300px;
-	width: 700px;
+	/* min-height: 300px; */
+	width: 90%;
+	max-width: 900px;
+	min-width: 300px;
 	background-color: #01b4c6;
 	border-radius: 10px;
 	box-shadow: 0 0 15px #97ce4c;
@@ -32,19 +35,19 @@ main {
 }
 
 .imgContainer {
-    height: 100%;
+  width: 300px;
 	display: flex;
 	align-items: flex-start;
 	justify-content: center;
 }
 
 .imgContainer img {
-    height: 100%;
+  /* width: 50%; */
 	border-radius: 10px 0px 0px 10px;
 }
 
 h1 {
-    width: 100%;
+  width: 100%;
 	text-align: center;
 	font-size: 2.25rem;
 	color: white;
@@ -52,7 +55,8 @@ h1 {
 }
 
 .infoContainer {
-    width: 80%;
+  width: 60%;
+	min-width: 300px;
 	height: 100%;
 	display: flex;
 	flex-direction: column;
@@ -80,4 +84,19 @@ h1 {
     font-size: 1.2rem;
     text-align: end;
     font-weight: 600;
+}
+
+.reload {
+	background-color: #2317a2;
+	color: #fff;
+	cursor: pointer;
+	border: none;
+	border-radius: 10px;
+	padding: 8px 10px;
+	font-size: 20px;
+}
+
+.reload:hover {
+	color: #000;
+	background-color: #97ce4c;
 }

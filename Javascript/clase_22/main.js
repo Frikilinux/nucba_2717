@@ -1,29 +1,36 @@
-const cardContainer = document.querySelector("main");
+const cardContainer = document.querySelector('main');
 
-const BASE_URL = "https://rickandmortyapi.com/api/character/";
+const BASE_URL = 'https://rickandmortyapi.com/api/character/';
 
 const getRandomNumber = () => {
-	return Math.floor(Math.random() * 825) + 1;
+  return Math.floor(Math.random() * 825) + 50;
 };
 
 const getPj = async () => {
-	try {
-		const newPj = await fetch(`${BASE_URL}${getRandomNumber()}`).then((res) =>
-			res.json()
-		);
-		console.log(newPj);
-		return newPj;
-	} catch (error) {
-		console.log(error);
-		cardContainer.innerHTML = `
-        <h1>ROMPIMOS TODO....</h1>
-    `;
-	}
+  try {
+    const newPj = await fetch(`${BASE_URL}${getRandomNumber()}`).then((res) =>
+      res.json()
+    );
+    console.log(newPj, 'NEW PJ');
+    return newPj;
+  } catch (error) {
+    console.log(error, 'ERROR');
+    renderError();
+  }
 };
 
+setReloadBtn = () => {
+  const btnReload = document.querySelector('.reload')
+  btnReload.addEventListener('click', getAndRenderPj)
+}
+
 const renderNewPj = (character) => {
-	const { image, name, species, origin, gender, id } = character;
-	cardContainer.innerHTML = `
+  const { image, name, species, origin, gender, id } = character;
+  if (!id) {
+    renderError(character);
+    return;
+  }
+  cardContainer.innerHTML = `
     <div class="cardWrapper" id=${id}>
         <div class="imgContainer">
             <img src=${image} alt="" />
@@ -44,19 +51,28 @@ const renderNewPj = (character) => {
             </div>
         </div>
     </div>
+    <button class="reload">Recargar</button>
     `;
+    setReloadBtn()
 };
 
+const renderError = (error) => {
+  cardContainer.innerHTML = `<h1>Algo malió sal... Tratando de recargar.</h1>`;
+  if (error.error) cardContainer.innerHTML += `<h2>Error: ${error.error}</h2>`;
+  setTimeout(async () => renderNewPj(await pj()), 5000); // trata otra vez
+};
+
+const pj = async () => await getPj();
+
 const getAndRenderPj = async () => {
-	cardContainer.innerHTML = `
+  cardContainer.innerHTML = `
         <h1>CARGANDO....</h1>
     `;
-	const pj = await getPj();
-	renderNewPj(pj);
+  renderNewPj(await pj());
 };
 
 const init = () => {
-	window.addEventListener("DOMContentLoaded", getAndRenderPj);
+  window.addEventListener('DOMContentLoaded', getAndRenderPj);
 };
 
 init();
