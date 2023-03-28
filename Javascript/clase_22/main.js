@@ -1,6 +1,6 @@
 const cardContainer = document.querySelector('.card-container');
 
-const BASE_URL = 'https://rickandmortyapi.com/ap/character/';
+const BASE_URL = 'https://rickandmortyapi.com/api/character/';
 
 let controller = {
   loading: false,
@@ -40,7 +40,7 @@ const renderNewPj = (character) => {
   }
   cardContainer.innerHTML = `
     <span class="pro">${species}</span>
-    <img src="${image}" alt="user"/>
+    <img src="${image}" alt="user" class="character-img"/>
     <h3 class="name">${name}</h3>
     
     <h6 class="origin">
@@ -79,6 +79,7 @@ const renderError = (error) => {
   !error.error ? (err = error) : (err = error.error);
   cardContainer.innerHTML = `
     <div class="error">
+      <img src="./img/error.png" alt="Imagen de error" class="error-img">
       <h2>Algo malió sal...</h2>
       <h4>Tratando de recargar en <span class="time">5</span> seg</h4>
       <h5>Error: ${err}</h5>
@@ -92,9 +93,11 @@ const pj = async () => await getPj();
 
 const getAndRenderPj = () => {
   cardContainer.innerHTML = `
-        <h2>CARGANDO....</h2>
-    `;
-  setTimeout(async () => renderNewPj(await pj()), 1500);
+    <div class="loading">
+    <span class="loader"></span>
+    </div>
+  `;
+  setTimeout(async () => renderNewPj(await pj()), 2000);
 };
 
 const init = () => {
