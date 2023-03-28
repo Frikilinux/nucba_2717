@@ -1,4 +1,4 @@
-const cardContainer = document.querySelector('.card-container');
+const cardContainer = document.querySelector('main');
 
 const BASE_URL = 'https://rickandmortyapi.com/api/character/';
 
@@ -18,12 +18,10 @@ const getPj = async () => {
     const newPj = await fetch(`${BASE_URL}${getRandomNumber()}`).then((res) =>
       res.json()
     );
-    console.log(newPj, 'NEW PJ');
     return newPj;
   } catch (error) {
-    console.log(error, 'ERROR');
     renderError(error);
-    return
+    return;
   }
 };
 
@@ -39,62 +37,65 @@ const renderNewPj = (character) => {
     return;
   }
   cardContainer.innerHTML = `
-    <span class="pro">${species}</span>
-    <img src="${image}" alt="user" class="character-img"/>
-    <h3 class="name">${name}</h3>
-    
-    <h6 class="origin">
-    <i class="fa-solid fa-earth-americas"></i>
-    ${origin.name}</h6>
-    <h6 class="gender">
-      <i class="fa-solid fa-venus-mars"></i>
-      ${gender}</h6>
-    <div class="buttons">
-      <button class="primary reload">
-          Reload
-      </button>
+  <div id="${id}" class="card-container">
+      <span class="pro">${species}</span>
+      <img src="${image}" alt="user" class="character-img"/>
+      <h3 class="name">${name}</h3>
+      
+      <h6 class="origin">
+      <i class="fa-solid fa-earth-americas"></i>
+      ${origin.name}</h6>
+      <h6 class="gender">
+        <i class="fa-solid fa-venus-mars"></i>
+        ${gender}</h6>
+      <div class="buttons">
+        <button class="primary reload">
+            Reload
+        </button>
+      </div>
     </div>
     `;
   setReloadBtn();
-  controller.timeAutoReload = 5000;
-  controller.loading = false;
+  controller.errorCount = 0;
 };
 
 let timeInterval;
 
 const timeAutoReload = () => {
-  const { timeAutoReload } = controller;
-  document.querySelector('.time').textContent = timeAutoReload / 1000;
-  console.log(timeAutoReload, 'TIME TO RELOAD');
-  timeAutoReload <= 0
+  controller.timeAutoReload <= 0
     ? (getAndRenderPj(), clearInterval(timeInterval))
-    : (controller.timeAutoReload -= 1000);
+    : controller.timeAutoReload--;
+  document.querySelector('.time').textContent = controller.timeAutoReload.toString().padStart(2, '0');
 };
 
 const renderError = (error) => {
   controller.errorCount += 1;
-  console.log(controller.errorCount, 'ERROR COUNT');
-  controller.timeAutoReload = 5000 * controller.errorCount;
+  controller.timeAutoReload = 5 * controller.errorCount;
   let err;
   !error.error ? (err = error) : (err = error.error);
   cardContainer.innerHTML = `
-    <div class="error">
-      <img src="./img/error.png" alt="Imagen de error" class="error-img">
-      <h2>Algo malió sal...</h2>
-      <h4>Tratando de recargar en <span class="time">5</span> seg</h4>
-      <h5>Error: ${err}</h5>
+    <div class="card-container">
+      <div class="error">
+        <img src="./img/error.png" alt="Imagen de error" class="error-img">
+        <h2>Algo malió sal...</h2>
+        <h4>Tratando de recargar en
+          <span class="time">${controller.timeAutoReload.toString().padStart(2, '0')}</span> seg.
+        </h4>
+        <h5>Error: ${err}</h5>
+      </div>
     </div>
     `;
   timeInterval = setInterval(timeAutoReload, 1000);
-  // setTimeout(() => getAndRenderPj(), controller.timeToReload); // trata otra vez
 };
 
 const pj = async () => await getPj();
 
 const getAndRenderPj = () => {
   cardContainer.innerHTML = `
-    <div class="loading">
-    <span class="loader"></span>
+    <div class="card-container">
+      <div class="loading">
+      <span class="loader"></span>
+      </div>
     </div>
   `;
   setTimeout(async () => renderNewPj(await pj()), 2000);

@@ -124,6 +124,10 @@ button.primary.ghost {
 	width: 200px;
 }
 
+.time {
+	font-family: 'Courier New', Courier, monospace;
+}
+
 .loading {
 	height: 100%;
 	display: flex;
