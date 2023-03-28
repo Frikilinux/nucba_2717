@@ -2,6 +2,11 @@ const cardContainer = document.querySelector('main');
 
 const BASE_URL = 'https://rickandmortyapi.com/api/character/';
 
+let controller = {
+  timeToReload: 5000,
+  loading: false,
+};
+
 const getRandomNumber = () => {
   return Math.floor(Math.random() * 825) + 50;
 };
@@ -15,14 +20,14 @@ const getPj = async () => {
     return newPj;
   } catch (error) {
     console.log(error, 'ERROR');
-    renderError();
+    renderError(error);
   }
 };
 
 setReloadBtn = () => {
-  const btnReload = document.querySelector('.reload')
-  btnReload.addEventListener('click', getAndRenderPj)
-}
+  const btnReload = document.querySelector('.reload');
+  btnReload.addEventListener('click', getAndRenderPj);
+};
 
 const renderNewPj = (character) => {
   const { image, name, species, origin, gender, id } = character;
@@ -53,22 +58,27 @@ const renderNewPj = (character) => {
     </div>
     <button class="reload">Recargar</button>
     `;
-    setReloadBtn()
+  setReloadBtn();
+  controller.loading = false;
 };
 
 const renderError = (error) => {
+  let err;
   cardContainer.innerHTML = `<h1>Algo malió sal... Tratando de recargar.</h1>`;
-  if (error.error) cardContainer.innerHTML += `<h2>Error: ${error.error}</h2>`;
-  setTimeout(async () => renderNewPj(await pj()), 5000); // trata otra vez
+  !error.error ? (err = error) : (err = error.error);
+
+  cardContainer.innerHTML += `<h2>Error: ${err}</h2>`;
+
+  setTimeout(() => getAndRenderPj(), 5000); // trata otra vez
 };
 
 const pj = async () => await getPj();
 
-const getAndRenderPj = async () => {
+const getAndRenderPj = () => {
   cardContainer.innerHTML = `
         <h1>CARGANDO....</h1>
     `;
-  renderNewPj(await pj());
+  setTimeout(async () => renderNewPj(await pj()), 1500);
 };
 
 const init = () => {
